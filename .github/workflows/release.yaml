@@ -6,7 +6,7 @@ on:
       - 'example/**'
   push:
     branches:
-      - main
+      - master
     paths:
       - 'src/**'
 jobs:
@@ -29,11 +29,8 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Lint 🧹
         run: yarn lint
-      - name: Tests 🧪
-        if: ${{ github.ref != 'refs/heads/main' }}
-        run: yarn coverage
       - name: Build 🪛
-        run: yarn build:package
+        run: yarn build
       - name: Release 🪄🎁
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/master' }}
         run: yarn semantic-release
