@@ -1,0 +1,39 @@
+name: Release
+run-name: ${{ github.actor }} is releasing a new version 🚀
+on:
+  pull_request:
+    paths-ignore:
+      - 'example/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🧲
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Node.js ⚙️
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+          cache: 'yarn'
+      - name: Install dependencies 📦
+        run: yarn install --frozen-lockfile
+      - name: Lint 🧹
+        run: yarn lint
+      - name: Tests 🧪
+        if: ${{ github.ref != 'refs/heads/main' }}
+        run: yarn coverage
+      - name: Build 🪛
+        run: yarn build:package
+      - name: Release 🪄🎁
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: yarn semantic-release
