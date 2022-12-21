@@ -1,16 +1,29 @@
 {
+  "include": ["src/**/*.ts", "src/**/*.json"],
+  "exclude": ["commitlint.config.js"],
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
+    "moduleResolution": "node",
+    "strict": true,
+    "module": "CommonJS",
+    "target": "ES2020",
+    "lib": ["ES2020"],
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "removeComments": false,
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSourceMap": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "composite": true,
+    "tsBuildInfoFile": "build/.tsbuildinfo"
   }
 }
+
