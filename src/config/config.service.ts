@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common'
 import convict from 'convict'
 import { Schema } from './config.schema'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config()
+
 @Injectable()
 export class ConfigService {
   readonly #config = convict(Schema).validate()

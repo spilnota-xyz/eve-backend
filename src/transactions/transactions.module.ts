@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common'
-import { EtherscanModule } from '../etherscan/etherscan.module'
+import { NFTPortModule } from '../nftport/nftport.module'
+import { ProviderModule } from '../provider/provider.module'
 import { TransactionsController } from './transactions.controller'
 import { TransactionsService } from './transactions.service'
 
 @Module({
   providers: [TransactionsService],
-  imports: [EtherscanModule],
+  imports: [NFTPortModule, ProviderModule],
   controllers: [TransactionsController],
   exports: [TransactionsService]
 })

@@ -6,37 +6,22 @@ export const Schema = {
     env: 'PORT',
     arg: 'port'
   },
-  etherscan: {
+  nftPort: {
     apiKey: {
-      doc: 'Etherscan API key',
-      // protected: true,
+      doc: 'The API key to use when making requests to the NFTPort API.',
       format: String,
       default: '',
-      env: 'ETHERSCAN_API_KEY',
-      arg: 'etherscan'
-    },
-    baseURL: {
-      doc: 'Etherscan API base URL',
+      env: 'NFTPORT_API_KEY',
+      arg: 'nft-port-api-key'
+    }
+  },
+  alchemy: {
+    apiKey: {
+      doc: 'The API key to use when making requests to the Alchemy API.',
       format: String,
-      default: 'https://api.etherscan.io/api',
-      env: 'ETHERSCAN_BASE_URL',
-      arg: 'etherscan-base-url'
-    },
-    throttling: {
-      maxRequests: {
-        doc: 'Maximum number of requests per time window',
-        format: Number,
-        default: 1,
-        env: 'ETHERSCAN_THROTTLING_MAX_REQUESTS',
-        arg: 'etherscan-max-requests'
-      },
-      perMilliseconds: {
-        doc: 'Time window in milliseconds',
-        format: Number,
-        default: 5000,
-        env: 'ETHERSCAN_THROTTLING_PER_MILLISECONDS',
-        arg: 'etherscan-per-milliseconds'
-      }
+      default: '',
+      env: 'ALCHEMY_API_KEY',
+      arg: 'alchemy-api-key'
     }
   }
 }

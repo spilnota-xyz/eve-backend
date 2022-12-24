@@ -7,6 +7,6 @@ export class TransactionsController {
 
   @Get(':address')
   getTransactions(@Param('address') address: string) {
-    return this.appService.getTransactions(address)
+    return this.appService.getTransactions(address.toLowerCase())
   }
 }
