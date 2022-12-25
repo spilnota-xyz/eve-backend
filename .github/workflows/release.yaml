@@ -2,13 +2,11 @@ name: Release
 run-name: ${{ github.actor }} is releasing a new version 🚀
 on:
   pull_request:
-    paths-ignore:
-      - 'example/**'
+    branches:
+      - main
   push:
     branches:
-      - master
-    paths:
-      - 'src/**'
+      - main
 jobs:
   lint:
     name: Lint
@@ -36,10 +34,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build 🪛
-        run: yarn buil
       - name: Install dependencies 📦
         run: yarn install --frozen-lockfile
+      - name: Build 🪛
+        run: yarn build
       - name: Decode .env
         run: echo "${{ secrets.ENV_FILE_BASE64 }}" | base64 -d > .env
       - name: SSH Copy
@@ -73,7 +71,11 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies 📦
+        run: yarn install --frozen-lockfile
       - name: Release 🪄🎁
         if: ${{ github.ref == 'refs/heads/main' }}
         run: yarn semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
