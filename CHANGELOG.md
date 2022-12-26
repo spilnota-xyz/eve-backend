@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.0.0...v1.1.0) (2022-12-26)
+
+
+### Features
+
+* `/transactions` partial data ([8baf332](https://github.com/spilnota-xyz/eve-backend/commit/8baf33275c68bcede21e585ff98a4a9c7daf81ad))
+
 # 1.0.0 (2022-12-25)
 
 
