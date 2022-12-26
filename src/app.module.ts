@@ -16,8 +16,8 @@ import { TwitterOauthModule } from './twitter-oauth/twitter-oauth.module'
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        consumerKey: configService.get('twitter.clientId'),
-        consumerSecret: configService.get('twitter.clientSecret'),
+        consumerKey: configService.get('twitter.customerId'),
+        consumerSecret: configService.get('twitter.customerSecret'),
         callbackURL: configService.get('twitter.callbackUrl')
       })
     })

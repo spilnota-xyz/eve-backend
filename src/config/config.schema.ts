@@ -34,19 +34,19 @@ export const Schema = {
     }
   },
   twitter: {
-    clientId: {
-      doc: 'Twitter client ID',
+    customerId: {
+      doc: 'Twitter Customer ID',
       format: String,
       default: '',
-      env: 'TWITTER_CLIENT_ID',
-      arg: 'twitter-client-id'
+      env: 'TWITTER_CUSTOMER_ID',
+      arg: 'twitter-customer-id'
     },
-    clientSecret: {
-      doc: 'Twitter client secret',
+    customerSecret: {
+      doc: 'Twitter Customer Secret',
       format: String,
       default: '',
-      env: 'TWITTER_CLIENT_SECRET',
-      arg: 'twitter-client-secret'
+      env: 'TWITTER_CUSTOMER_SECRET',
+      arg: 'twitter-customer-secret'
     },
     callbackUrl: {
       doc: 'Twitter callback URL',
