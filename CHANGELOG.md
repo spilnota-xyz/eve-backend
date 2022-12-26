@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.1.0...v1.2.0) (2022-12-26)
+
+
+### Features
+
+* top100 and average hold time ([19c9a1e](https://github.com/spilnota-xyz/eve-backend/commit/19c9a1e5bcbc4b377fbba325842f483472c90863))
+
 # [1.1.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.0.0...v1.1.0) (2022-12-26)
 
 
