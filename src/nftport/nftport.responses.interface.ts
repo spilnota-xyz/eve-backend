@@ -142,3 +142,84 @@ export class NFTPortTransactionGuard {
     )
   }
 }
+
+export type NFTPortContractSalesStatistics = {
+  one_day_volume: number
+  one_day_change: number
+  one_day_sales: number
+  one_day_average_price: number
+
+  seven_day_volume: number
+  seven_day_change: number
+  seven_day_sales: number
+  seven_day_average_price: number
+
+  thirty_day_volume: number
+  thirty_day_change: number
+  thirty_day_sales: number
+  thirty_day_average_price: number
+
+  total_volume: number
+  total_sales: number
+  total_supply: number
+  total_minted: number
+  num_owners: number
+  average_price: number
+  market_cap: number
+  floor_price: number
+  floor_price_historic_one_day: number
+  floor_price_historic_seven_day: number
+  floor_price_historic_thirty_day: number
+
+  updated_date: string
+}
+
+export type NFTPortContractSalesStatisticsResponse =
+  | {
+      response: 'OK'
+      error: never
+      statistics: NFTPortContractSalesStatistics
+    }
+  | {
+      response: 'NOK'
+      error: {
+        status_code: number
+        code: string
+        message: string
+      }
+      statistics: never
+    }
+
+export type NFTPortRetrieveContractsOwnedByAnAccount = {
+  name?: string
+  symbol?: string
+  type?: 'ERC721' | 'ERC1155' | 'CRYPTO_PUNKS'
+  metadata?: {
+    description?: string
+    thumbnail_url?: string
+    cached_thumbnail_url?: string
+    banner_url?: string
+    cached_banner_url?: string
+  }
+  address: string
+  num_nfts_owned?: number
+}
+
+export type NFTPortRetrieveContractsOwnedByAnAccountResponse =
+  | {
+      response: 'OK'
+      error: never
+      contracts: NFTPortRetrieveContractsOwnedByAnAccount[]
+      total: number
+      continuation?: string
+    }
+  | {
+      response: 'NOK'
+      error: {
+        status_code: number
+        code: string
+        message: string
+      }
+      contracts: never
+      continuation: never
+    }
