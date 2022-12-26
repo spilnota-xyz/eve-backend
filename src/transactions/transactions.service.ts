@@ -126,18 +126,40 @@ export class TransactionsService {
     }, 0)
   }
 
-  async getTransactions(address: string): Promise<any> {
-    const biggestSale = await this.getBiggestNFTSale(address)
+  async getTransactions(
+    address: string,
+    options: {
+      biggestSale?: boolean
+      biggestPurchase?: boolean
+      totalBought?: boolean
+      totalSold?: boolean
+      totalSpentOnMint?: boolean
+      totalNFTsMinted?: boolean
+    }
+  ): Promise<any> {
+    const biggestSale = options.biggestSale
+      ? await this.getBiggestNFTSale(address)
+      : null
 
-    const biggestPurchase = await this.getBiggestNFTPurchase(address)
+    const biggestPurchase = options.biggestPurchase
+      ? await this.getBiggestNFTPurchase(address)
+      : null
 
-    const totalBought = await this.getTotalBoughtInETH(address)
+    const totalBought = options.totalBought
+      ? await this.getTotalBoughtInETH(address)
+      : null
 
-    const totalSold = await this.getTotalSoldInETH(address)
+    const totalSold = options.totalSold
+      ? await this.getTotalSoldInETH(address)
+      : null
 
-    const totalSpentOnMint = await this.getTotalSpentOnMintInETH(address)
+    const totalSpentOnMint = options.totalSpentOnMint
+      ? await this.getTotalSpentOnMintInETH(address)
+      : null
 
-    const totalNFTsMinted = await this.getTotalNFTsMinted(address)
+    const totalNFTsMinted = options.totalNFTsMinted
+      ? await this.getTotalNFTsMinted(address)
+      : null
 
     return {
       biggestSale,
