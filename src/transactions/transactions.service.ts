@@ -8,6 +8,7 @@ import {
 } from '../nftport/nftport.responses.interface'
 import { NFTPortService } from '../nftport/nftport.service'
 import { ProviderService } from '../provider/provider.service'
+import { TOP_100_CONTRACTS } from './top100contracts.constant'
 
 @Injectable()
 export class TransactionsService {
@@ -15,32 +16,6 @@ export class TransactionsService {
     private readonly nftportService: NFTPortService,
     private readonly providerService: ProviderService
   ) {}
-
-  // private async getNFTsRecieved(address: string) {
-  //   const transactions = await this.nftportService.getTransactionsByAddress(
-  //     'ethereum',
-  //     address
-  //   )
-  //   return transactions
-  //     .filter<NFTPortTransactionTransfer>(NFTPortTransactionGuard.isTransfer)
-  //     .filter(
-  //       ({ transfer_to, type }) =>
-  //         type === NFTPortTransactionType.TRANSFER && transfer_to === address
-  //     )
-  // }
-
-  // private async getNFTsSent(address: string) {
-  //   const transactions = await this.nftportService.getTransactionsByAddress(
-  //     'ethereum',
-  //     address
-  //   )
-  //   return transactions
-  //     .filter<NFTPortTransactionTransfer>(NFTPortTransactionGuard.isTransfer)
-  //     .filter(
-  //       ({ transfer_from, type }) =>
-  //         type === NFTPortTransactionType.TRANSFER && transfer_from === address
-  //     )
-  // }
 
   private async getNFTsBought(address: string) {
     const transactions = await this.nftportService.getTransactionsByAddress(
@@ -126,6 +101,58 @@ export class TransactionsService {
     }, 0)
   }
 
+  private async getHoldingsTop100(address: string) {
+    const ownedContracts =
+      await this.nftportService.getContractsOwnedByAnAccount(
+        'ethereum',
+        address
+      )
+
+    return ownedContracts.filter(({ address }) =>
+      TOP_100_CONTRACTS.includes(address)
+    )
+  }
+
+  private findKey(acc: Record<string, any>, key: string): string {
+    if (acc[key]?.length === 2) return this.findKey(acc, key + '_')
+    else return key
+  }
+
+  private async getAverageHoldTime(address: string) {
+    const transactions = await this.nftportService.getTransactionsByAddress(
+      'ethereum',
+      address
+    )
+    const transfers = transactions.filter(NFTPortTransactionGuard.isTransfer)
+
+    // pull out the first and last transfer of the token id in a set
+    const nftTransfersDates = Object.values(
+      transfers.reduceRight(
+        (acc, { transaction_date, contract_address, token_id }) => {
+          // in rare case there can be more than two in-out transfers for single token_id
+          const key = this.findKey(acc, `${contract_address}-${token_id}`)
+
+          const date = new Date(transaction_date)
+
+          acc[key] = acc[key]?.concat(date) ?? [date]
+          return acc
+        },
+        {} as Record<string, Date[]>
+      )
+    )
+
+    // avg(T_n) = E (T[i->n]/n)
+    return Math.floor(
+      nftTransfersDates.reduce(
+        (total, dates) =>
+          (total +=
+            ((dates[1]?.getTime() ?? Date.now()) - dates[0].getTime()) /
+            (nftTransfersDates.length * 1000)),
+        0
+      )
+    )
+  }
+
   async getTransactions(
     address: string,
     options: {
@@ -135,6 +162,8 @@ export class TransactionsService {
       totalSold?: boolean
       totalSpentOnMint?: boolean
       totalNFTsMinted?: boolean
+      holdingsTop100?: boolean
+      averageHoldTime?: boolean
     }
   ): Promise<any> {
     const biggestSale = options.biggestSale
@@ -161,13 +190,23 @@ export class TransactionsService {
       ? await this.getTotalNFTsMinted(address)
       : null
 
+    const holdingsTop100 = options.holdingsTop100
+      ? await this.getHoldingsTop100(address)
+      : null
+
+    const averageHoldTime = options.averageHoldTime
+      ? await this.getAverageHoldTime(address)
+      : null
+
     return {
       biggestSale,
       biggestPurchase,
       totalBought,
       totalSold,
       totalSpentOnMint,
-      totalNFTsMinted
+      totalNFTsMinted,
+      holdingsTop100,
+      averageHoldTime
     }
   }
 }
