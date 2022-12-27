@@ -28,8 +28,8 @@ export class NFTPortService {
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache
   ) {
     this.axios = axiosRateLimit(Axios.create(), {
-      maxRequests: 3,
-      perMilliseconds: 1100
+      maxRequests: 2,
+      perMilliseconds: 1000
     })
     axiosRetry(this.axios, { retryDelay: axiosRetry.exponentialDelay })
 
@@ -74,7 +74,14 @@ export class NFTPortService {
         )
 
       if (response === 'NOK') {
-        Logger.warn('NFTPort returned NOK for transactions', error)
+        Logger.warn(
+          `NFTPort returned NOK for transactions: ${JSON.stringify(
+            error,
+            null,
+            2
+          )}`,
+          'NFTPortService'
+        )
         throw new InternalServerErrorException(error.message)
       }
       allContracts.push(...contracts)
@@ -93,7 +100,7 @@ export class NFTPortService {
   async getContractSalesStatistics(
     chain: 'ethereum' | 'polygon',
     contractAddress: string
-  ): Promise<NFTPortContractSalesStatistics> {
+  ): Promise<NFTPortContractSalesStatistics | null> {
     const cacheKey = `stats-${chain}-${contractAddress}`
 
     const cachedStats =
@@ -110,13 +117,21 @@ export class NFTPortService {
         },
         params: {
           chain
-        }
+        },
+        validateStatus: (status) => status === 200 || status === 404
       }
     )
 
     if (response === 'NOK') {
-      Logger.warn('NFTPort returned NOK for transactions', error)
-      throw new InternalServerErrorException(error.message)
+      Logger.warn(
+        `NFTPort returned NOK for statistics: ${chain} ${contractAddress} ${JSON.stringify(
+          error,
+          null,
+          2
+        )}`,
+        'NFTPortService'
+      )
+      return null
     }
 
     await this.cacheManager.set(cacheKey, statistics)
@@ -158,7 +173,14 @@ export class NFTPortService {
       )
 
       if (response === 'NOK') {
-        Logger.warn('NFTPort returned NOK for transactions', error)
+        Logger.warn(
+          `NFTPort returned NOK for transactions: ${JSON.stringify(
+            error,
+            null,
+            2
+          )}`,
+          'NFTPortService'
+        )
         throw new InternalServerErrorException(error.message)
       }
       allTransactions.push(...transactions)

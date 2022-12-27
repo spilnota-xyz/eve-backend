@@ -8,7 +8,6 @@ import {
 } from '../nftport/nftport.responses.interface'
 import { NFTPortService } from '../nftport/nftport.service'
 import { ProviderService } from '../provider/provider.service'
-import { TOP_100_CONTRACTS } from './top100contracts.constant'
 
 @Injectable()
 export class TransactionsService {
@@ -101,16 +100,22 @@ export class TransactionsService {
     }, 0)
   }
 
-  private async getHoldingsTop100(address: string) {
+  private async getCoolHoldings(address: string) {
     const ownedContracts =
       await this.nftportService.getContractsOwnedByAnAccount(
         'ethereum',
         address
       )
 
-    return ownedContracts.filter(({ address }) =>
-      TOP_100_CONTRACTS.includes(address)
+    const ownedContractsStatistics = await Promise.all(
+      ownedContracts.map(({ address }) =>
+        this.nftportService.getContractSalesStatistics('ethereum', address)
+      )
     )
+
+    return ownedContractsStatistics.filter(
+      (data) => data && data.floor_price >= 1 && data.thirty_day_volume >= 30
+    ).length
   }
 
   private findKey(acc: Record<string, any>, key: string): string {
@@ -162,7 +167,7 @@ export class TransactionsService {
       totalSold?: boolean
       totalSpentOnMint?: boolean
       totalNFTsMinted?: boolean
-      holdingsTop100?: boolean
+      coolHoldings?: boolean
       averageHoldTime?: boolean
     }
   ): Promise<any> {
@@ -190,8 +195,8 @@ export class TransactionsService {
       ? await this.getTotalNFTsMinted(address)
       : null
 
-    const holdingsTop100 = options.holdingsTop100
-      ? await this.getHoldingsTop100(address)
+    const coolHoldings = options.coolHoldings
+      ? await this.getCoolHoldings(address)
       : null
 
     const averageHoldTime = options.averageHoldTime
@@ -205,7 +210,7 @@ export class TransactionsService {
       totalSold,
       totalSpentOnMint,
       totalNFTsMinted,
-      holdingsTop100,
+      coolHoldings,
       averageHoldTime
     }
   }
