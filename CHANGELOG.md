@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.2.0...v1.3.0) (2022-12-27)
+
+
+### Features
+
+* get cool holdings ([3541824](https://github.com/spilnota-xyz/eve-backend/commit/3541824317c3887142284346d68b4fdd1f961d8e))
+
 # [1.2.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.1.0...v1.2.0) (2022-12-26)
 
 
