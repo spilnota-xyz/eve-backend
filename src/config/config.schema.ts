@@ -32,5 +32,14 @@ export const Schema = {
       env: 'SESSION_SECRET',
       arg: 'session-secret'
     }
+  },
+  mongodb: {
+    uri: {
+      doc: 'The URI to use when connecting to MongoDB.',
+      format: String,
+      default: '',
+      env: 'MONGODB_URI',
+      arg: 'mongodb-uri'
+    }
   }
 }
