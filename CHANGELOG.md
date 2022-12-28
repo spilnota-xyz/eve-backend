@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.4.0...v1.5.0) (2022-12-28)
+
+
+### Features
+
+* add Card module ([5f8146e](https://github.com/spilnota-xyz/eve-backend/commit/5f8146ec579dbc7515ceff8a230fce9c7099dc4e))
+
 # [1.4.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.3.0...v1.4.0) (2022-12-28)
 
 
