@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.3.0...v1.4.0) (2022-12-28)
+
+
+### Features
+
+* add `totalBoughtInETH` and `totalSoldInETH` ([6717f00](https://github.com/spilnota-xyz/eve-backend/commit/6717f00cd8c9cf457684fdda03a65bb09dc2e8c9))
+
 # [1.3.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.2.0...v1.3.0) (2022-12-27)
 
 
