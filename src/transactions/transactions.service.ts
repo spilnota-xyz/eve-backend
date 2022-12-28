@@ -165,6 +165,8 @@ export class TransactionsService {
       biggestPurchase?: boolean
       totalBought?: boolean
       totalSold?: boolean
+      totalBoughtInETH?: boolean
+      totalSoldInETH?: boolean
       totalSpentOnMint?: boolean
       totalNFTsMinted?: boolean
       coolHoldings?: boolean
@@ -180,10 +182,18 @@ export class TransactionsService {
       : null
 
     const totalBought = options.totalBought
-      ? await this.getTotalBoughtInETH(address)
+      ? (await this.getNFTsBought(address)).length
       : null
 
     const totalSold = options.totalSold
+      ? (await this.getNFTsSold(address)).length
+      : null
+
+    const totalBoughtInETH = options.totalBought
+      ? await this.getTotalBoughtInETH(address)
+      : null
+
+    const totalSoldInETH = options.totalSold
       ? await this.getTotalSoldInETH(address)
       : null
 
@@ -208,6 +218,8 @@ export class TransactionsService {
       biggestPurchase,
       totalBought,
       totalSold,
+      totalBoughtInETH,
+      totalSoldInETH,
       totalSpentOnMint,
       totalNFTsMinted,
       coolHoldings,
