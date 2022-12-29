@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/spilnota-xyz/eve-backend/compare/v1.6.1...v1.6.2) (2022-12-29)
+
+
+### Bug Fixes
+
+* append dto and scheme ([69f8f2a](https://github.com/spilnota-xyz/eve-backend/commit/69f8f2a1886c6028c7f811f7d8eb103b77d46093))
+
 ## [1.6.1](https://github.com/spilnota-xyz/eve-backend/compare/v1.6.0...v1.6.1) (2022-12-29)
 
 
