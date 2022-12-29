@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.5.0...v1.6.0) (2022-12-29)
+
+
+### Features
+
+* add other required fields to Card schema ([22c3408](https://github.com/spilnota-xyz/eve-backend/commit/22c34083f14d6e254c847efdc5932b639c498f0c))
+
 # [1.5.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.4.0...v1.5.0) (2022-12-28)
 
 
