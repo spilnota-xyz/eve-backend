@@ -52,4 +52,16 @@ export class CreateCardDto {
   @IsNotEmpty()
   @IsNumber()
   readonly gradientIndex: number
+
+  @IsNotEmpty()
+  @IsString()
+  readonly favouriteCommunity: string
+
+  @IsNotEmpty()
+  @IsString()
+  readonly wish: string
+
+  @IsOptional()
+  @IsString()
+  readonly whoBroughtMeHere: string
 }

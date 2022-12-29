@@ -46,6 +46,15 @@ export class Card {
 
   @Prop({ required: true })
   gradientIndex: number
+
+  @Prop({ required: true })
+  readonly favouriteCommunity: string
+
+  @Prop({ required: true })
+  readonly wish: string
+
+  @Prop()
+  readonly whoBroughtMeHere: string
 }
 
 export const CardSchema = SchemaFactory.createForClass(Card)
