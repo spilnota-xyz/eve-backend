@@ -37,6 +37,15 @@ export class Card {
 
   @Prop({ required: true })
   slug: string
+
+  @Prop({ required: true })
+  username: string
+
+  @Prop({ required: true })
+  image: string
+
+  @Prop({ required: true })
+  gradientIndex: number
 }
 
 export const CardSchema = SchemaFactory.createForClass(Card)

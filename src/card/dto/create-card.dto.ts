@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional } from 'class-validator'
+import { IsNumber, IsOptional, IsString, IsNotEmpty } from 'class-validator'
 
 export class CreateCardDto {
   @IsOptional()
@@ -40,4 +40,16 @@ export class CreateCardDto {
   @IsOptional()
   @IsNumber()
   readonly averageHoldTime?: number
+
+  @IsNotEmpty()
+  @IsString()
+  readonly username: string
+
+  @IsNotEmpty()
+  @IsString()
+  readonly image: string
+
+  @IsNotEmpty()
+  @IsNumber()
+  readonly gradientIndex: number
 }
