@@ -56,7 +56,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd backend
-            yarn --production --frozen-lockfile
+            yarn --production
             pm2 delete "backend"
             pm2 start --name "backend" yarn -- start:prod
   release:
@@ -72,7 +72,7 @@ jobs:
           persist-credentials: false
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install dependencies 📦
-        run: yarn install --frozen-lockfile
+        run: yarn install
       - name: Release 🪄🎁
         if: ${{ github.ref == 'refs/heads/main' }}
         run: yarn semantic-release
