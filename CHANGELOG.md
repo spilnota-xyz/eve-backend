@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/spilnota-xyz/eve-backend/compare/v1.6.0...v1.6.1) (2022-12-29)
+
+
+### Bug Fixes
+
+* bad mongo connection artifact ([d2b81fc](https://github.com/spilnota-xyz/eve-backend/commit/d2b81fcf49e85884cef575249ed167fbe9444c61))
+
 # [1.6.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.5.0...v1.6.0) (2022-12-29)
 
 
