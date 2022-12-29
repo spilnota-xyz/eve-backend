@@ -16,7 +16,6 @@ import { CardModule } from './card/card.module'
         uri: configService.get('mongodb.uri')
       })
     }),
-    MongooseModule.forRoot('mongodb://localhost/nest'),
     CacheModule.register({ ttl: 600 * 1000, isGlobal: true }),
     TransactionsModule,
     CardModule
