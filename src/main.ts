@@ -15,6 +15,7 @@ async function bootstrap() {
     })
   )
   app.useGlobalPipes(new ValidationPipe())
+  app.enableCors()
   await app.listen(configService.get('port'), () =>
     Logger.log(
       `Listening at port ${configService.get('port')}`,
