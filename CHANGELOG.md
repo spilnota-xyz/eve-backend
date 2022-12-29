@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.6.3...v1.7.0) (2022-12-29)
+
+
+### Features
+
+* `twitter` module ([9d27e9b](https://github.com/spilnota-xyz/eve-backend/commit/9d27e9bb849483b9be74ab026a876b30ea4a71db))
+
 ## [1.6.3](https://github.com/spilnota-xyz/eve-backend/compare/v1.6.2...v1.6.3) (2022-12-29)
 
 
