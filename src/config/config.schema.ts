@@ -41,5 +41,14 @@ export const Schema = {
       env: 'MONGODB_URI',
       arg: 'mongodb-uri'
     }
+  },
+  twitter: {
+    token: {
+      doc: 'The Bearer Token used to request Twitter.',
+      format: String,
+      default: '',
+      env: 'TWITTER_TOKEN',
+      arg: 'twitter-token'
+    }
   }
 }

@@ -5,6 +5,7 @@ import { TransactionsModule } from './transactions/transactions.module'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ConfigService } from './config/config.service'
 import { CardModule } from './card/card.module'
+import { TwitterModule } from './twitter/twitter.module'
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CardModule } from './card/card.module'
     }),
     CacheModule.register({ ttl: 600 * 1000, isGlobal: true }),
     TransactionsModule,
+    TwitterModule,
     CardModule
   ],
   providers: [AppService]
