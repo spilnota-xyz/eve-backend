@@ -19,7 +19,7 @@ jobs:
           persist-credentials: false
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install dependencies 📦
-        run: yarn install --frozen-lockfile
+        run: yarn install
       - name: Lint 🧹
         run: yarn lint
   deploy:
@@ -35,7 +35,7 @@ jobs:
           persist-credentials: false
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install dependencies 📦
-        run: yarn install --frozen-lockfile
+        run: yarn install
       - name: Build 🪛
         run: yarn build
       - name: Decode .env
