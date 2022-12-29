@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/spilnota-xyz/eve-backend/compare/v1.6.2...v1.6.3) (2022-12-29)
+
+
+### Bug Fixes
+
+* enable cors ([c096e48](https://github.com/spilnota-xyz/eve-backend/commit/c096e48dce384bf9de6d49dd2736077155d01310))
+
 ## [1.6.2](https://github.com/spilnota-xyz/eve-backend/compare/v1.6.1...v1.6.2) (2022-12-29)
 
 
