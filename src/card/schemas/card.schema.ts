@@ -30,10 +30,10 @@ export class Card {
   totalNFTsMinted: number
 
   @Prop()
-  coolHoldings: number
+  bluechips: number
 
   @Prop()
-  averageHoldTime: number
+  avgHoldTime: number
 
   @Prop({ required: true })
   slug: string

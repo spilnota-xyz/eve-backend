@@ -169,8 +169,8 @@ export class TransactionsService {
       totalSoldInETH?: boolean
       totalSpentOnMint?: boolean
       totalNFTsMinted?: boolean
-      coolHoldings?: boolean
-      averageHoldTime?: boolean
+      bluechips?: boolean
+      avgHoldTime?: boolean
     }
   ): Promise<any> {
     const biggestSale = options.biggestSale
@@ -189,11 +189,11 @@ export class TransactionsService {
       ? (await this.getNFTsSold(address)).length
       : null
 
-    const totalBoughtInETH = options.totalBought
+    const totalBoughtInETH = options.totalBoughtInETH
       ? await this.getTotalBoughtInETH(address)
       : null
 
-    const totalSoldInETH = options.totalSold
+    const totalSoldInETH = options.totalSoldInETH
       ? await this.getTotalSoldInETH(address)
       : null
 
@@ -205,11 +205,11 @@ export class TransactionsService {
       ? await this.getTotalNFTsMinted(address)
       : null
 
-    const coolHoldings = options.coolHoldings
+    const bluechips = options.bluechips
       ? await this.getCoolHoldings(address)
       : null
 
-    const averageHoldTime = options.averageHoldTime
+    const avgHoldTime = options.avgHoldTime
       ? await this.getAverageHoldTime(address)
       : null
 
@@ -222,8 +222,8 @@ export class TransactionsService {
       totalSoldInETH,
       totalSpentOnMint,
       totalNFTsMinted,
-      coolHoldings,
-      averageHoldTime
+      bluechips,
+      avgHoldTime
     }
   }
 }

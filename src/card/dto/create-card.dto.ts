@@ -35,11 +35,11 @@ export class CreateCardDto {
 
   @IsOptional()
   @IsNumber()
-  readonly coolHoldings?: number
+  readonly bluechips?: number
 
   @IsOptional()
   @IsNumber()
-  readonly averageHoldTime?: number
+  readonly avgHoldTime?: number
 
   @IsNotEmpty()
   @IsString()
