@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.8.1...v1.9.0) (2022-12-30)
+
+
+### Features
+
+* **nftport:** increase rate limit and retry count ([bc21759](https://github.com/spilnota-xyz/eve-backend/commit/bc217595ecfa5163a95479993e5d48bbd543666e))
+
 ## [1.8.1](https://github.com/spilnota-xyz/eve-backend/compare/v1.8.0...v1.8.1) (2022-12-30)
 
 
