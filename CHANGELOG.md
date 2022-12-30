@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.7.0...v1.8.0) (2022-12-30)
+
+
+### Features
+
+* `getAverageHoldTime` filter by `>0.2 ETH` ([7bade93](https://github.com/spilnota-xyz/eve-backend/commit/7bade934768d8fd2cefd6ea33e3cbc24f4de730a))
+
 # [1.7.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.6.3...v1.7.0) (2022-12-29)
 
 
