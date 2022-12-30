@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/spilnota-xyz/eve-backend/compare/v1.9.0...v1.9.1) (2022-12-30)
+
+
+### Bug Fixes
+
+* `axios-retry` incorrect usage fix ([efa466b](https://github.com/spilnota-xyz/eve-backend/commit/efa466bcbeaeff9468a0cb6ada012dc8ec64214c))
+
 # [1.9.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.8.1...v1.9.0) (2022-12-30)
 
 
