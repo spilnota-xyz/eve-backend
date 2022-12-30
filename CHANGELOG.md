@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/spilnota-xyz/eve-backend/compare/v1.8.0...v1.8.1) (2022-12-30)
+
+
+### Bug Fixes
+
+* don't take erc20 into account ([1987ffb](https://github.com/spilnota-xyz/eve-backend/commit/1987ffb84f2d6dd4ea9b845277ee4c44494f3942))
+
 # [1.8.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.7.0...v1.8.0) (2022-12-30)
 
 
