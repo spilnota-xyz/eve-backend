@@ -1,5 +1,5 @@
 import { formatEther, parseEther } from '@ethersproject/units'
-import { Injectable } from '@nestjs/common'
+import { Injectable, CACHE_MANAGER, Inject } from '@nestjs/common'
 import {
   NFTPortTransactionGuard,
   NFTPortTransactionSale,
@@ -8,12 +8,15 @@ import {
 } from '../nftport/nftport.responses.interface'
 import { NFTPortService } from '../nftport/nftport.service'
 import { ProviderService } from '../provider/provider.service'
+import { Cache } from 'cache-manager'
+import { TransactionResponse } from '@ethersproject/providers'
 
 @Injectable()
 export class TransactionsService {
   constructor(
     private readonly nftportService: NFTPortService,
-    private readonly providerService: ProviderService
+    private readonly providerService: ProviderService,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache
   ) {}
 
   private async getNFTsBought(address: string) {
@@ -56,7 +59,14 @@ export class TransactionsService {
 
     let totalSpent = parseEther('0')
     for (const mintTransaction of minted) {
-      const tx = await provider.getTransaction(mintTransaction.transaction_hash)
+      const cacheKey = `tx:${mintTransaction.transaction_hash}`
+      const cached = await this.cacheManager.get<TransactionResponse>(cacheKey)
+
+      const tx =
+        cached ??
+        (await provider.getTransaction(mintTransaction.transaction_hash))
+
+      if (!cached) await this.cacheManager.set(cacheKey, tx)
       totalSpent = totalSpent.add(tx.value)
     }
 
@@ -70,32 +80,46 @@ export class TransactionsService {
 
   private async getBiggestNFTSale(address: string) {
     const sold = await this.getNFTsSold(address)
-    return sold.reduce((biggest, current) => {
+    const soldInETH = sold.filter(
+      ({ price_details }) => price_details?.asset_type === 'ETH'
+    )
+    return soldInETH.reduce((biggest, current) => {
       if ((current.price_details?.price ?? biggest) > biggest)
         return current.price_details?.price ?? biggest
       return biggest
-    }, sold[0]?.price_details.price ?? 0)
+    }, soldInETH[0]?.price_details.price ?? 0)
   }
 
   private async getBiggestNFTPurchase(address: string) {
     const bought = await this.getNFTsBought(address)
-    return bought.reduce((biggest, current) => {
+    const boughtInETH = bought.filter(
+      ({ price_details }) => price_details?.asset_type === 'ETH'
+    )
+    return boughtInETH.reduce((biggest, current) => {
       if ((current.price_details?.price ?? biggest) > biggest)
         return current.price_details?.price ?? biggest
       return biggest
-    }, bought[0]?.price_details.price ?? 0)
+    }, boughtInETH[0]?.price_details.price ?? 0)
   }
 
   private async getTotalSoldInETH(address: string) {
     const sold = await this.getNFTsSold(address)
-    return sold.reduce((total, current) => {
+    const soldInETH = sold.filter(
+      ({ price_details }) => price_details?.asset_type === 'ETH'
+    )
+
+    return soldInETH.reduce((total, current) => {
       return total + (current.price_details?.price ?? 0)
     }, 0)
   }
 
   private async getTotalBoughtInETH(address: string) {
-    const sold = await this.getNFTsBought(address)
-    return sold.reduce((total, current) => {
+    const bought = await this.getNFTsBought(address)
+    const boughtInETH = bought.filter(
+      ({ price_details }) => price_details?.asset_type === 'ETH'
+    )
+
+    return boughtInETH.reduce((total, current) => {
       return total + (current.price_details?.price ?? 0)
     }, 0)
   }
