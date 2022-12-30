@@ -130,9 +130,21 @@ export class TransactionsService {
     )
     const transfers = transactions.filter(NFTPortTransactionGuard.isTransfer)
 
+    const richTranfers = new Array<NFTPortTransactionTransfer>()
+
+    for (const transfer of transfers) {
+      const { contract_address } = transfer
+      const salesStatistics =
+        await this.nftportService.getContractSalesStatistics(
+          'ethereum',
+          contract_address
+        )
+      if (salesStatistics?.floor_price ?? 0 > 0.2) richTranfers.push(transfer)
+    }
+
     // pull out the first and last transfer of the token id in a set
     const nftTransfersDates = Object.values(
-      transfers.reduceRight(
+      richTranfers.reduceRight(
         (acc, { transaction_date, contract_address, token_id }) => {
           // in rare case there can be more than two in-out transfers for single token_id
           const key = this.findKey(acc, `${contract_address}-${token_id}`)
