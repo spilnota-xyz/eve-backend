@@ -28,10 +28,13 @@ export class NFTPortService {
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache
   ) {
     this.axios = axiosRateLimit(Axios.create(), {
-      maxRequests: 2,
+      maxRequests: 10,
       perMilliseconds: 1000
     })
-    axiosRetry(this.axios, { retryDelay: axiosRetry.exponentialDelay })
+    axiosRetry(this.axios, {
+      retries: 5,
+      retryDelay: axiosRetry.exponentialDelay
+    })
 
     this.axios.interceptors.request.use((request) => {
       // console.log('Starting Request', JSON.stringify(request, null, 2))
