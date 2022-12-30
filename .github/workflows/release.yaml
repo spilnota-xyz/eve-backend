@@ -55,7 +55,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd backend
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             yarn --production
             pm2 delete "backend"
             pm2 start --name "backend" yarn -- start:prod
