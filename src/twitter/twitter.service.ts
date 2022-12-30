@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios'
 import Axios from 'axios'
 import { ConfigService } from '../config/config.service'
 import { Cache } from 'cache-manager'
-import axiosRetry from 'axios-retry'
+import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry'
 import axiosRateLimit from 'axios-rate-limit'
 import { TwitterGetProfileResponse } from './twitter.responses.interface'
 
@@ -18,7 +18,11 @@ export class TwitterService {
       maxRequests: 2,
       perMilliseconds: 1000
     })
-    axiosRetry(this.axios, { retryDelay: axiosRetry.exponentialDelay })
+    axiosRetry(this.axios, {
+      retryDelay: axiosRetry.exponentialDelay,
+      retryCondition: (e) =>
+        isNetworkOrIdempotentRequestError(e) || e.response?.status === 429
+    })
 
     this.axios.interceptors.request.use((request) => {
       console.log('Starting Request', JSON.stringify(request, null, 2))

@@ -17,7 +17,7 @@ import {
   NFTPortTransaction
 } from './nftport.responses.interface'
 import { Cache } from 'cache-manager'
-import axiosRetry from 'axios-retry'
+import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry'
 import axiosRateLimit from 'axios-rate-limit'
 
 @Injectable()
@@ -33,7 +33,9 @@ export class NFTPortService {
     })
     axiosRetry(this.axios, {
       retries: 5,
-      retryDelay: axiosRetry.exponentialDelay
+      retryDelay: axiosRetry.exponentialDelay,
+      retryCondition: (e) =>
+        isNetworkOrIdempotentRequestError(e) || e.response?.status === 429
     })
 
     this.axios.interceptors.request.use((request) => {
