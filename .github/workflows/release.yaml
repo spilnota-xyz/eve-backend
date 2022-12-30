@@ -57,6 +57,7 @@ jobs:
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
+            cd backend
             yarn --production
             pm2 delete "backend"
             pm2 start --name "backend" yarn -- start:prod
