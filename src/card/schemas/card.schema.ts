@@ -47,10 +47,10 @@ export class Card {
   @Prop({ required: true })
   gradientIndex: number
 
-  @Prop({ required: true })
+  @Prop()
   readonly favouriteCommunity: string
 
-  @Prop({ required: true })
+  @Prop()
   readonly wish: string
 
   @Prop()
