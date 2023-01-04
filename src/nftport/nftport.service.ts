@@ -46,60 +46,43 @@ export class NFTPortService {
 
   async getContractsOwnedByAnAccount(
     chain: 'ethereum' | 'polygon',
-    address: string
-  ): Promise<NFTPortRetrieveContractsOwnedByAnAccount[]> {
-    const cacheKey = `owned-${chain}-${address}`
-
-    const cachedContracts = await this.cacheManager.get<
-      NFTPortRetrieveContractsOwnedByAnAccount[]
-    >(cacheKey)
-    if (cachedContracts) return cachedContracts
-
-    const allContracts: NFTPortRetrieveContractsOwnedByAnAccount[] = []
-    let continuationIterator: undefined | string
-
-    while (true) {
-      const {
-        data: { response, contracts, error, continuation }
-      } =
-        await this.axios.get<NFTPortRetrieveContractsOwnedByAnAccountResponse>(
-          `https://api.nftport.xyz/v0/accounts/contracts/${address}`,
-          {
-            headers: {
-              Authorization: this.configService.get('nftPort.apiKey')
-            },
-            params: {
-              chain,
-              type: 'owns_contract_nfts',
-              ...(continuationIterator && {
-                continuation: continuationIterator
-              })
-            }
-          }
-        )
-
-      if (response === 'NOK') {
-        Logger.warn(
-          `NFTPort returned NOK for transactions: ${JSON.stringify(
-            error,
-            null,
-            2
-          )}`,
-          'NFTPortService'
-        )
-        throw new InternalServerErrorException(error.message)
+    address: string,
+    continuationIterator?: string
+  ): Promise<{
+    contracts: NFTPortRetrieveContractsOwnedByAnAccount[]
+    continuation?: string
+  }> {
+    const {
+      data: { response, contracts, error, continuation }
+    } = await this.axios.get<NFTPortRetrieveContractsOwnedByAnAccountResponse>(
+      `https://api.nftport.xyz/v0/accounts/contracts/${address}`,
+      {
+        headers: {
+          Authorization: this.configService.get('nftPort.apiKey')
+        },
+        params: {
+          chain,
+          type: 'owns_contract_nfts',
+          ...(continuationIterator && {
+            continuation: continuationIterator
+          })
+        }
       }
-      allContracts.push(...contracts)
+    )
 
-      if (!continuation) {
-        break
-      }
-      continuationIterator = continuation
+    if (response === 'NOK') {
+      Logger.warn(
+        `NFTPort returned NOK for transactions: ${JSON.stringify(
+          error,
+          null,
+          2
+        )}`,
+        'NFTPortService'
+      )
+      throw new InternalServerErrorException(error.message)
     }
 
-    await this.cacheManager.set(cacheKey, allContracts)
-
-    return allContracts
+    return { contracts, continuation }
   }
 
   async getContractSalesStatistics(
@@ -146,58 +129,39 @@ export class NFTPortService {
 
   async getTransactionsByAddress(
     chain: 'ethereum' | 'polygon',
-    address: string
-  ): Promise<NFTPortTransaction[]> {
-    const cacheKey = `transactions-${chain}-${address}`
-
-    const cachedTransactions = await this.cacheManager.get<
-      NFTPortTransaction[]
-    >(cacheKey)
-    if (cachedTransactions) return cachedTransactions
-
-    const allTransactions: NFTPortTransaction[] = []
-    let continuationIterator: undefined | string
-
-    while (true) {
-      const {
-        data: { response, transactions, error, continuation }
-      } = await this.axios.get<NFTPortGetTransactionsByAddressResponse>(
-        `https://api.nftport.xyz/v0/transactions/accounts/${address}`,
-        {
-          headers: {
-            Authorization: this.configService.get('nftPort.apiKey')
-          },
-          params: {
-            chain,
-            type: 'all',
-            ...(continuationIterator && {
-              continuation: continuationIterator
-            })
-          }
+    address: string,
+    continuationIterator?: string
+  ): Promise<{ transactions: NFTPortTransaction[]; continuation?: string }> {
+    const {
+      data: { response, transactions, error, continuation }
+    } = await this.axios.get<NFTPortGetTransactionsByAddressResponse>(
+      `https://api.nftport.xyz/v0/transactions/accounts/${address}`,
+      {
+        headers: {
+          Authorization: this.configService.get('nftPort.apiKey')
+        },
+        params: {
+          chain,
+          type: 'all',
+          ...(continuationIterator && {
+            continuation: continuationIterator
+          })
         }
+      }
+    )
+
+    if (response === 'NOK') {
+      Logger.warn(
+        `NFTPort returned NOK for transactions: ${JSON.stringify(
+          error,
+          null,
+          2
+        )}`,
+        'NFTPortService'
       )
-
-      if (response === 'NOK') {
-        Logger.warn(
-          `NFTPort returned NOK for transactions: ${JSON.stringify(
-            error,
-            null,
-            2
-          )}`,
-          'NFTPortService'
-        )
-        throw new InternalServerErrorException(error.message)
-      }
-      allTransactions.push(...transactions)
-
-      if (!continuation) {
-        break
-      }
-      continuationIterator = continuation
+      throw new InternalServerErrorException(error.message)
     }
 
-    await this.cacheManager.set(cacheKey, allTransactions)
-
-    return allTransactions
+    return { transactions, continuation }
   }
 }
