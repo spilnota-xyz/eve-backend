@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.9.1...v1.10.0) (2023-01-04)
+
+
+### Features
+
+* chunk loading ([4fff21f](https://github.com/spilnota-xyz/eve-backend/commit/4fff21f045e9d04510a74c8cb05a8e3a26b5d0ea))
+
 ## [1.9.1](https://github.com/spilnota-xyz/eve-backend/compare/v1.9.0...v1.9.1) (2022-12-30)
 
 
