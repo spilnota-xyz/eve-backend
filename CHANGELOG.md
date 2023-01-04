@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/spilnota-xyz/eve-backend/compare/v1.10.0...v1.10.1) (2023-01-04)
+
+
+### Bug Fixes
+
+* decompose the routes ([d3375ac](https://github.com/spilnota-xyz/eve-backend/commit/d3375acad939e1d5549bfad7131452fd678315c4))
+
 # [1.10.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.9.1...v1.10.0) (2023-01-04)
 
 
