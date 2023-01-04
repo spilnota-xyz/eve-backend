@@ -21,7 +21,7 @@ export class TransactionsService {
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache
   ) {}
 
-  private async getNFTsBought(
+  public async getNFTsBought(
     transactions: NFTPortTransaction[],
     address: string
   ) {
@@ -30,13 +30,35 @@ export class TransactionsService {
       .filter(({ buyer_address }) => buyer_address === address)
   }
 
-  private async getNFTsSold(
+  public async getNFTsBoughtQuantity(
+    transactions: NFTPortTransaction[],
+    address: string
+  ) {
+    const boughtNFTs = await this.getNFTsBought(transactions, address)
+    return boughtNFTs.reduce(
+      (total, current) => total + (current.quantity ?? 0),
+      0
+    )
+  }
+
+  public async getNFTsSold(
     transactions: NFTPortTransaction[],
     address: string
   ) {
     return transactions
       .filter<NFTPortTransactionSale>(NFTPortTransactionGuard.isSale)
       .filter(({ seller_address }) => seller_address === address)
+  }
+
+  public async getNFTsSoldQuantity(
+    transactions: NFTPortTransaction[],
+    address: string
+  ) {
+    const soldNFTs = await this.getNFTsSold(transactions, address)
+    return soldNFTs.reduce(
+      (total, current) => total + (current.quantity ?? 0),
+      0
+    )
   }
 
   private async getNFTsMinted(
@@ -51,7 +73,7 @@ export class TransactionsService {
       )
   }
 
-  private async getTotalSpentOnMintInETH(
+  public async getTotalSpentOnMintInETH(
     transactions: NFTPortTransaction[],
     address: string
   ) {
@@ -75,7 +97,7 @@ export class TransactionsService {
     return parseFloat(formatEther(totalSpent))
   }
 
-  private async getTotalNFTsMinted(
+  public async getTotalNFTsMinted(
     transactions: NFTPortTransaction[],
     address: string
   ) {
@@ -83,7 +105,7 @@ export class TransactionsService {
     return minted.reduce((total, current) => total + current.quantity, 0)
   }
 
-  private async getBiggestNFTSale(
+  public async getBiggestNFTSale(
     transactions: NFTPortTransaction[],
     address: string
   ) {
@@ -98,7 +120,7 @@ export class TransactionsService {
     }, soldInETH[0]?.price_details.price ?? 0)
   }
 
-  private async getBiggestNFTPurchase(
+  public async getBiggestNFTPurchase(
     transactions: NFTPortTransaction[],
     address: string
   ) {
@@ -113,7 +135,7 @@ export class TransactionsService {
     }, boughtInETH[0]?.price_details.price ?? 0)
   }
 
-  private async getTotalSoldInETH(
+  public async getTotalSoldInETH(
     transactions: NFTPortTransaction[],
     address: string
   ) {
@@ -127,7 +149,7 @@ export class TransactionsService {
     }, 0)
   }
 
-  private async getTotalBoughtInETH(
+  public async getTotalBoughtInETH(
     transactions: NFTPortTransaction[],
     address: string
   ) {
@@ -141,12 +163,18 @@ export class TransactionsService {
     }, 0)
   }
 
-  private async getCoolHoldings(
+  public async getBluechips(
     ownedContracts: NFTPortRetrieveContractsOwnedByAnAccount[]
   ) {
     const ownedContractsStatistics = await Promise.all(
       ownedContracts.map(({ address }) =>
         this.nftportService.getContractSalesStatistics('ethereum', address)
+      )
+    )
+
+    console.log(
+      ownedContractsStatistics.filter(
+        (data) => data && data.floor_price >= 1 && data.thirty_day_volume >= 30
       )
     )
 
@@ -160,7 +188,7 @@ export class TransactionsService {
     else return key
   }
 
-  private async getAverageHoldTime(transactions: NFTPortTransaction[]) {
+  public async getAverageHoldTime(transactions: NFTPortTransaction[]) {
     const transfers = transactions.filter(NFTPortTransactionGuard.isTransfer)
 
     const richTranfers = new Array<NFTPortTransactionTransfer>()
@@ -206,91 +234,18 @@ export class TransactionsService {
     }
   }
 
+  public async getOwnedContracts(address: string): Promise<any> {
+    return this.nftportService.getContractsOwnedByAnAccount('ethereum', address)
+  }
+
   async getTransactions(
     address: string,
-    options: {
-      biggestSale?: boolean
-      biggestPurchase?: boolean
-      totalBought?: boolean
-      totalSold?: boolean
-      totalBoughtInETH?: boolean
-      totalSoldInETH?: boolean
-      totalSpentOnMint?: boolean
-      totalNFTsMinted?: boolean
-      bluechips?: boolean
-      avgHoldTime?: boolean
-      continuationTransactions?: string
-      continuationContracts?: string
-    }
+    continuationTransactions?: string
   ): Promise<any> {
-    if (Object.values(options).every((v) => !v)) return {}
-    let result = {}
-    const { transactions, continuation: continuationTransactions } =
-      await this.nftportService.getTransactionsByAddress(
-        'ethereum',
-        address,
-        options.continuationTransactions
-      )
-
-    const { contracts, continuation: continuationContracts } =
-      await this.nftportService.getContractsOwnedByAnAccount(
-        'ethereum',
-        address,
-        options.continuationContracts
-      )
-
-    const biggestSale =
-      options.biggestSale &&
-      (await this.getBiggestNFTSale(transactions, address))
-    if (biggestSale) result = { ...result, biggestSale }
-
-    const biggestPurchase =
-      options.biggestPurchase &&
-      (await this.getBiggestNFTPurchase(transactions, address))
-    if (biggestPurchase) result = { ...result, biggestPurchase }
-
-    const totalBought =
-      options.totalBought &&
-      (await this.getNFTsBought(transactions, address)).length
-    if (totalBought) result = { ...result, totalBought }
-
-    const totalSold =
-      options.totalSold &&
-      (await this.getNFTsSold(transactions, address)).length
-    if (totalSold) result = { ...result, totalSold }
-
-    const totalBoughtInETH =
-      options.totalBoughtInETH &&
-      (await this.getTotalBoughtInETH(transactions, address))
-    if (totalBoughtInETH) result = { ...result, totalBoughtInETH }
-
-    const totalSoldInETH =
-      options.totalSoldInETH &&
-      (await this.getTotalSoldInETH(transactions, address))
-    if (totalSoldInETH) result = { ...result, totalSoldInETH }
-
-    const totalSpentOnMint =
-      options.totalSpentOnMint &&
-      (await this.getTotalSpentOnMintInETH(transactions, address))
-    if (totalSpentOnMint) result = { ...result, totalSpentOnMint }
-
-    const totalNFTsMinted =
-      options.totalNFTsMinted &&
-      (await this.getTotalNFTsMinted(transactions, address))
-    if (totalNFTsMinted) result = { ...result, totalNFTsMinted }
-
-    const bluechips =
-      options.bluechips && (await this.getCoolHoldings(contracts))
-    if (bluechips) result = { ...result, bluechips }
-
-    const avgHoldTime =
-      options.avgHoldTime && (await this.getAverageHoldTime(transactions))
-    if (avgHoldTime) result = { ...result, ...avgHoldTime }
-
-    if (continuationContracts) result = { ...result, continuationContracts }
-    if (continuationTransactions)
-      result = { ...result, continuationTransactions }
-
-    return result
+    return await this.nftportService.getTransactionsByAddress(
+      'ethereum',
+      address,
+      continuationTransactions
+    )
   }
 }
