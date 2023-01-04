@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/spilnota-xyz/eve-backend/compare/v1.10.1...v1.11.0) (2023-01-04)
+
+
+### Features
+
+* filter mint transactions from airdrops ([323621f](https://github.com/spilnota-xyz/eve-backend/commit/323621fcb4521b66d4d31a9985bca350fee4c7f6))
+
 ## [1.10.1](https://github.com/spilnota-xyz/eve-backend/compare/v1.10.0...v1.10.1) (2023-01-04)
 
 
