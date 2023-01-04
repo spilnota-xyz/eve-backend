@@ -65,12 +65,27 @@ export class TransactionsService {
     transactions: NFTPortTransaction[],
     address: string
   ) {
-    return transactions
+    const provider = this.providerService.getProvider()
+    const filtered = transactions
       .filter<NFTPortTransactionTransfer>(NFTPortTransactionGuard.isTransfer)
       .filter(
         ({ owner_address, type }) =>
           type === NFTPortTransactionType.MINT && owner_address === address
       )
+    const allTransactions = []
+
+    for (const transaction of filtered) {
+      const cacheKey = `tx:${transaction.transaction_hash}`
+      const cached = await this.cacheManager.get<TransactionResponse>(cacheKey)
+
+      const tx =
+        cached ?? (await provider.getTransaction(transaction.transaction_hash))
+
+      if (!cached) await this.cacheManager.set(cacheKey, tx)
+      if (tx.from.toLowerCase() !== address) continue
+      allTransactions.push(transaction)
+    }
+    return allTransactions
   }
 
   public async getTotalSpentOnMintInETH(
@@ -169,12 +184,6 @@ export class TransactionsService {
     const ownedContractsStatistics = await Promise.all(
       ownedContracts.map(({ address }) =>
         this.nftportService.getContractSalesStatistics('ethereum', address)
-      )
-    )
-
-    console.log(
-      ownedContractsStatistics.filter(
-        (data) => data && data.floor_price >= 1 && data.thirty_day_volume >= 30
       )
     )
 
